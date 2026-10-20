@@ -1,7 +1,7 @@
 "use strict";
 
 const NS = "http://www.w3.org/2000/svg";
-const state = { data: null, interval: "3m", method: "hail_baseline" };
+const state = { data: null, interval: "3m" };
 const $ = (selector, root = document) => root.querySelector(selector);
 
 function node(tag, className, text) {
@@ -111,17 +111,13 @@ function point(parent, attrs, tooltip, order) {
   parent.appendChild(circle);
 }
 
-function drawSignal(dataset) {
-  const mount = $("#signal-chart");
-  const series = dataset.series.find((item) => item.id === state.method) || dataset.series[0];
-  const values = [...series.mean, ...series.seeds.flat()];
-  const [yMin, yMax] = extent(values);
-  const width = 1000;
-  const height = 500;
-  const left = 64;
-  const right = 38;
-  const top = 34;
-  const bottom = 56;
+function signalPanel(dataset, series, yMin, yMax) {
+  const width = 420;
+  const height = 330;
+  const left = 52;
+  const right = 18;
+  const top = 28;
+  const bottom = 52;
   const x = scale(0, dataset.rhos.length - 1, left, width - right);
   const y = scale(yMin, yMax, height - bottom, top);
   const chart = svg("svg", { viewBox: `0 0 ${width} ${height}`, class: "chart-svg", preserveAspectRatio: "xMidYMid meet" });
@@ -141,7 +137,7 @@ function drawSignal(dataset) {
       class: "seed-line animated-path"
     }));
     seed.forEach((value, index) => {
-      point(chart, { cx: x(index), cy: y(value), r: 4, class: "seed-point" }, `seed ${seedIndex}: ${signed(value)} bps`, index);
+      point(chart, { cx: x(index), cy: y(value), r: 3, class: "seed-point" }, `seed ${seedIndex}: ${signed(value)} bps`, index);
     });
   });
 
@@ -151,12 +147,28 @@ function drawSignal(dataset) {
     class: "mean-line animated-path"
   }));
   series.mean.forEach((value, index) => {
-    point(chart, { cx: x(index), cy: y(value), r: 6.5, class: "mean-point" }, `mean: ${signed(value)} bps`, index);
+    point(chart, { cx: x(index), cy: y(value), r: 5, class: "mean-point" }, `mean: ${signed(value)} bps`, index);
   });
   const last = series.mean.length - 1;
-  text(chart, { x: x(last) - 5, y: y(series.mean[last]) - 14, "text-anchor": "end", class: "axis-label" }, `mean ${signed(series.mean[last])}`);
+  const panel = node("article", "signal-panel");
+  const header = node("div", "signal-panel-head");
+  header.append(
+    node("h3", "", series.label),
+    node("span", "signal-panel-value", `ρ=0.8 ${signed(series.mean[last])}`)
+  );
+  panel.append(header);
+  if (series.description) panel.append(node("p", "signal-panel-description", series.description));
+  panel.append(chart);
+  return panel;
+}
 
-  mount.replaceChildren(chart);
+function drawSignal(dataset) {
+  const mount = $("#signal-chart");
+  const values = dataset.series.flatMap((series) => [...series.mean, ...series.seeds.flat()]);
+  const [yMin, yMax] = extent(values);
+  mount.replaceChildren(
+    ...dataset.series.map((series) => signalPanel(dataset, series, yMin, yMax))
+  );
   reveal(mount);
 }
 
@@ -240,7 +252,6 @@ function empty(mount, interval, kind) {
 
 function renderInterval() {
   const interval = state.data.intervals.find((item) => item.id === state.interval);
-  const control = $("#method-select");
   const status = $("#interval-status");
   status.dataset.status = interval.status;
   status.replaceChildren(node("span", "run-status-label", `${interval.label} · ${interval.statusLabel}`));
@@ -256,7 +267,6 @@ function renderInterval() {
   $("#conclusion").textContent = interval.conclusion || "";
 
   if (!interval.chartData) {
-    control.disabled = true;
     $("#signal-tools").hidden = true;
     $("#twap-legend").hidden = true;
     empty($("#signal-chart"), interval, "signal");
@@ -266,8 +276,6 @@ function renderInterval() {
     return;
   }
 
-  setMethodOptions(interval.chartData.signalResponse.series);
-  control.disabled = false;
   $("#signal-tools").hidden = false;
   $("#twap-legend").hidden = false;
   $("#signal-scope").textContent = interval.chartData.signalResponse.scope;
@@ -300,26 +308,6 @@ function renderControls() {
   });
 }
 
-function setMethodOptions(series) {
-  const select = $("#method-select");
-  if (!series.some((item) => item.id === state.method)) state.method = series[0].id;
-  select.replaceChildren(...series.map((item) => {
-    const option = node("option", "", item.label);
-    option.value = item.id;
-    option.selected = item.id === state.method;
-    return option;
-  }));
-}
-
-function bindMethodControl() {
-  const select = $("#method-select");
-  select.addEventListener("change", (event) => {
-    state.method = event.target.value;
-    const interval = state.data.intervals.find((item) => item.id === state.interval);
-    if (interval.chartData) drawSignal(interval.chartData.signalResponse);
-  });
-}
-
 async function init() {
   try {
     const response = await fetch("data/experiments.json", { cache: "no-store" });
@@ -327,7 +315,6 @@ async function init() {
     state.data = await response.json();
     state.interval = state.data.meta.defaultInterval;
     renderControls();
-    bindMethodControl();
     renderInterval();
   } catch (error) {
     $("#interval-status").dataset.status = "in-progress";

@@ -21,8 +21,8 @@
           ],
           "series": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": [
                 0.0,
                 -0.6946406813506136,
@@ -38,7 +38,8 @@
                   -1.9931971189110895,
                   -2.213549819300471
                 ]
-              ]
+              ],
+              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
             },
             {
               "id": "sac",
@@ -72,7 +73,8 @@
                   0.4263229198430328,
                   0.5706769941646817
                 ]
-              ]
+              ],
+              "description": "Off-policy actor-critic trained with replayed execution transitions."
             },
             {
               "id": "ppo",
@@ -106,7 +108,8 @@
                   4.0829304214799045,
                   6.340730567420233
                 ]
-              ]
+              ],
+              "description": "On-policy actor-critic trained with clipped policy updates."
             },
             {
               "id": "memory_ppo",
@@ -140,7 +143,8 @@
                   0.18783772349112995,
                   0.44162560370719284
                 ]
-              ]
+              ],
+              "description": "Recurrent PPO carrying an LSTM state through each execution day."
             }
           ]
         },
@@ -148,8 +152,8 @@
           "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
           "methods": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": -2.763158771608289,
               "seeds": [
                 -2.763158771608289
@@ -189,7 +193,7 @@
         }
       },
       "progress": 100.0,
-      "conclusion": "PPO leads on mean; HAIL and SAC trail TWAP."
+      "conclusion": "PPO leads on mean; Rule-Based and SAC trail TWAP."
     },
     {
       "id": "3m",
@@ -210,8 +214,8 @@
           ],
           "series": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": [
                 0.0,
                 -0.1874993777446642,
@@ -227,7 +231,8 @@
                   -0.0008815032667146692,
                   -0.11124317830157357
                 ]
-              ]
+              ],
+              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
             },
             {
               "id": "sac",
@@ -261,7 +266,8 @@
                   -0.5253778066454332,
                   -0.8307951050046943
                 ]
-              ]
+              ],
+              "description": "Off-policy actor-critic trained with replayed execution transitions."
             },
             {
               "id": "ppo",
@@ -295,7 +301,8 @@
                   -0.20731242649119064,
                   -0.3015058207066126
                 ]
-              ]
+              ],
+              "description": "On-policy actor-critic trained with clipped policy updates."
             },
             {
               "id": "memory_ppo",
@@ -329,7 +336,8 @@
                   0.015654978125749088,
                   0.020481170872457138
                 ]
-              ]
+              ],
+              "description": "Recurrent PPO carrying an LSTM state through each execution day."
             }
           ]
         },
@@ -337,8 +345,8 @@
           "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
           "methods": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": -0.4481463678094673,
               "seeds": [
                 -0.4481463678094673
@@ -395,8 +403,8 @@
           ],
           "series": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": [
                 0.0,
                 1.0417388990877092,
@@ -412,7 +420,8 @@
                   1.978356169263746,
                   3.046275389922943
                 ]
-              ]
+              ],
+              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
             },
             {
               "id": "sac",
@@ -446,7 +455,8 @@
                   0.4356034447543312,
                   0.6517564405201998
                 ]
-              ]
+              ],
+              "description": "Off-policy actor-critic trained with replayed execution transitions."
             },
             {
               "id": "ppo",
@@ -480,7 +490,8 @@
                   0.0,
                   0.0
                 ]
-              ]
+              ],
+              "description": "On-policy actor-critic trained with clipped policy updates."
             },
             {
               "id": "memory_ppo",
@@ -514,7 +525,8 @@
                   0.5276095667047689,
                   0.6931432802559543
                 ]
-              ]
+              ],
+              "description": "Recurrent PPO carrying an LSTM state through each execution day."
             }
           ]
         },
@@ -522,8 +534,8 @@
           "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
           "methods": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": 2.68392472482322,
               "seeds": [
                 2.68392472482322
@@ -563,7 +575,7 @@
         }
       },
       "progress": 100.0,
-      "conclusion": "HAIL is positive; Memory-PPO is driven by one seed."
+      "conclusion": "Rule-Based is positive; Memory-PPO is driven by one seed."
     },
     {
       "id": "15m",
@@ -582,8 +594,8 @@
           ],
           "series": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": [
                 0.0,
                 2.3350245833125496,
@@ -599,7 +611,8 @@
                   6.055932647920587,
                   7.542566757330887
                 ]
-              ]
+              ],
+              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
             },
             {
               "id": "sac",
@@ -633,7 +646,8 @@
                   0.690558084539584,
                   0.8185542769725705
                 ]
-              ]
+              ],
+              "description": "Off-policy actor-critic trained with replayed execution transitions."
             },
             {
               "id": "ppo",
@@ -667,7 +681,8 @@
                   1.1786227560630969,
                   1.5580205473504491
                 ]
-              ]
+              ],
+              "description": "On-policy actor-critic trained with clipped policy updates."
             },
             {
               "id": "memory_ppo",
@@ -701,7 +716,8 @@
                   0.04237039652094583,
                   0.05126289021548941
                 ]
-              ]
+              ],
+              "description": "Recurrent PPO carrying an LSTM state through each execution day."
             }
           ]
         },
@@ -709,8 +725,8 @@
           "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
           "methods": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": 7.618839121305781,
               "seeds": [
                 7.618839121305781
@@ -750,7 +766,7 @@
         }
       },
       "progress": 100.0,
-      "conclusion": "HAIL and PPO beat TWAP; PPO remains dispersed."
+      "conclusion": "Rule-Based and PPO beat TWAP; PPO remains dispersed."
     },
     {
       "id": "30m",
@@ -769,8 +785,8 @@
           ],
           "series": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": [
                 0.0,
                 4.302857694302543,
@@ -786,7 +802,8 @@
                   10.446272126887363,
                   13.386265161830712
                 ]
-              ]
+              ],
+              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
             },
             {
               "id": "sac",
@@ -820,7 +837,8 @@
                   7.367970098314443,
                   10.157517164817017
                 ]
-              ]
+              ],
+              "description": "Off-policy actor-critic trained with replayed execution transitions."
             },
             {
               "id": "ppo",
@@ -854,7 +872,8 @@
                   0.16508842919359573,
                   0.21630086005967644
                 ]
-              ]
+              ],
+              "description": "On-policy actor-critic trained with clipped policy updates."
             },
             {
               "id": "memory_ppo",
@@ -888,7 +907,8 @@
                   -0.0002853607489262379,
                   -0.0012679081566945819
                 ]
-              ]
+              ],
+              "description": "Recurrent PPO carrying an LSTM state through each execution day."
             }
           ]
         },
@@ -896,8 +916,8 @@
           "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
           "methods": [
             {
-              "id": "hail_baseline",
-              "label": "HAIL baseline",
+              "id": "rule_based",
+              "label": "Rule-Based Baseline",
               "mean": 13.568040980148433,
               "seeds": [
                 13.568040980148433
@@ -937,7 +957,7 @@
         }
       },
       "progress": 100.0,
-      "conclusion": "HAIL leads; SAC turns positive but remains dispersed."
+      "conclusion": "Rule-Based leads; SAC turns positive but remains dispersed."
     }
   ]
 }

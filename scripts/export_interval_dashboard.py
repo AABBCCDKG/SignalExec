@@ -10,17 +10,26 @@ from statistics import mean
 INTERVALS = ("1m", "3m", "5m", "15m", "30m")
 RHOS = (0.0, 0.2, 0.4, 0.6, 0.8)
 METHODS = (
-    ("hail_baseline", "HAIL baseline"),
-    ("sac", "SAC"),
-    ("ppo", "PPO"),
-    ("memory_ppo", "Memory-PPO"),
+    ("hail_baseline", "rule_based", "Rule-Based Baseline"),
+    ("sac", "sac", "SAC"),
+    ("ppo", "ppo", "PPO"),
+    ("memory_ppo", "memory_ppo", "Memory-PPO"),
 )
+DESCRIPTIONS = {
+    "hail_baseline": (
+        "Favorable signal → trade one TWAP slice; otherwise wait until remaining "
+        "inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+    ),
+    "sac": "Off-policy actor-critic trained with replayed execution transitions.",
+    "ppo": "On-policy actor-critic trained with clipped policy updates.",
+    "memory_ppo": "Recurrent PPO carrying an LSTM state through each execution day.",
+}
 CONCLUSIONS = {
-    "1m": "PPO leads on mean; HAIL and SAC trail TWAP.",
+    "1m": "PPO leads on mean; Rule-Based and SAC trail TWAP.",
     "3m": "PPO leads on mean but remains seed-sensitive.",
-    "5m": "HAIL is positive; Memory-PPO is driven by one seed.",
-    "15m": "HAIL and PPO beat TWAP; PPO remains dispersed.",
-    "30m": "HAIL leads; SAC turns positive but remains dispersed.",
+    "5m": "Rule-Based is positive; Memory-PPO is driven by one seed.",
+    "15m": "Rule-Based and PPO beat TWAP; PPO remains dispersed.",
+    "30m": "Rule-Based leads; SAC turns positive but remains dispersed.",
 }
 
 
@@ -29,7 +38,9 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
-def series_for(rows: list[dict[str, str]], algorithm: str, label: str) -> dict:
+def series_for(
+    rows: list[dict[str, str]], algorithm: str, public_id: str, label: str
+) -> dict:
     selected = [row for row in rows if row["algorithm"] == algorithm]
     seeds = sorted(
         {row["train_seed"] for row in selected},
@@ -49,15 +60,20 @@ def series_for(rows: list[dict[str, str]], algorithm: str, label: str) -> dict:
         ]
         for seed in seeds
     ]
-    return {
-        "id": algorithm,
+    result = {
+        "id": public_id,
         "label": label,
         "mean": [mean(values) for values in zip(*seed_values)],
         "seeds": seed_values,
     }
+    if algorithm in DESCRIPTIONS:
+        result["description"] = DESCRIPTIONS[algorithm]
+    return result
 
 
-def method_for(rows: list[dict[str, str]], algorithm: str, label: str) -> dict:
+def method_for(
+    rows: list[dict[str, str]], algorithm: str, public_id: str, label: str
+) -> dict:
     values = [
         float(row["twap_shortfall_advantage_bps"])
         for row in rows
@@ -65,7 +81,7 @@ def method_for(rows: list[dict[str, str]], algorithm: str, label: str) -> dict:
         and row["signal_mode"] == "controlled"
         and float(row["signal_accuracy"]) == 0.8
     ]
-    return {"id": algorithm, "label": label, "mean": mean(values), "seeds": values}
+    return {"id": public_id, "label": label, "mean": mean(values), "seeds": values}
 
 
 def main() -> None:
@@ -106,15 +122,15 @@ def main() -> None:
                         "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
                         "rhos": list(RHOS),
                         "series": [
-                            series_for(did, algorithm, label)
-                            for algorithm, label in METHODS
+                            series_for(did, algorithm, public_id, label)
+                            for algorithm, public_id, label in METHODS
                         ],
                     },
                     "vsTwap": {
                         "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
                         "methods": [
-                            method_for(advantages, algorithm, label)
-                            for algorithm, label in METHODS
+                            method_for(advantages, algorithm, public_id, label)
+                            for algorithm, public_id, label in METHODS
                         ],
                     },
                 },
