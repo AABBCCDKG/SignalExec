@@ -308,14 +308,6 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
   font-size: 14px;
 }
 
-.rule-definition-heading span {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 8px;
-}
-
 .rule-definition math {
   width: 100%;
   color: var(--ink);
