@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="SignalExec multi-scale execution benchmark results." />
+    <title>SignalExec</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#results">Skip to results</a>
+
+    <header class="topbar">
+      <a class="project-name" href="#results">Signal<span>Exec</span></a>
+      <fieldset class="intervals" id="interval-control">
+        <legend>Interval</legend>
+      </fieldset>
+    </header>
+
+    <div class="run-status" id="interval-status" role="status" aria-live="polite"></div>
+
+    <main id="results">
+      <section class="plot-section plot-section-primary" aria-labelledby="signal-title">
+        <div class="plot-head">
+          <div>
+            <h1 id="signal-title">Signal quality response</h1>
+            <p id="signal-scope">Selected interval status</p>
+          </div>
+          <div class="plot-tools" id="signal-tools">
+            <div class="legend" aria-label="Chart legend">
+              <span><i class="legend-mean"></i>Mean</span>
+              <span><i class="legend-seed"></i>Seeds</span>
+            </div>
+            <label class="method-control" for="method-select">
+              <span>Method</span>
+              <select id="method-select"></select>
+            </label>
+          </div>
+        </div>
+        <div class="chart chart-main" id="signal-chart"></div>
+      </section>
+
+      <section class="plot-section" aria-labelledby="twap-title">
+        <div class="plot-head">
+          <div>
+            <h2 id="twap-title">vs TWAP</h2>
+            <p id="twap-scope">No result for selected interval</p>
+          </div>
+          <div class="legend" id="twap-legend" aria-label="Chart legend">
+            <span><i class="legend-mean diamond"></i>Mean</span>
+            <span><i class="legend-seed dot"></i>Seeds</span>
+          </div>
+        </div>
+        <div class="chart chart-twap" id="twap-chart"></div>
+      </section>
+
+      <p class="conclusion" id="conclusion"></p>
+    </main>
+
+    <noscript><p class="load-error">JavaScript is required to load the experiment JSON.</p></noscript>
+  </body>
+</html>

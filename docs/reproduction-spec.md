@@ -63,6 +63,35 @@ This preserves the rule's intended monotonic behavior: favorable signals cause s
 - test a constrained or action-masked schedule that guarantees completion;
 - state whether improved fill comes from a better policy or simply a stronger penalty.
 
+### Milestone 4 — chronological historical reproduction
+
+- use checksum-verified public market archives and record the exact files;
+- construct every signal from information available before its execution price;
+- fit forecast models only on dates before validation and test;
+- derive the long-horizon target independently from the next-bar execution signal;
+- evaluate all controls and RL policies on identical untouched historical days;
+- report signal quality, PnL, fill, costs, training-seed variation, and replay limits.
+
+### Milestone 5 — signal-isolated execution comparison
+
+- remove the learned Ridge forecasts from the comparison;
+- evaluate every historical path with both buy and sell targets;
+- give all policies identical controlled signals and require full completion;
+- compare implementation shortfall against matched TWAP on each path;
+- subtract each policy's matched `rho=0` advantage to isolate signal use;
+- estimate uncertainty on paired day-level buy/sell averages, not raw directions;
+- reserve a new chronological test period and label the oracle signals non-tradable.
+
+### Milestone 6 — raw-trade observation extension
+
+- checksum-verify full-period Binance Spot raw-trade archives;
+- stream the compressed CSVs into reusable five-minute feature buckets;
+- expose only the previous completed bucket at each decision time;
+- fit feature normalization on training dates only;
+- preserve identical controlled signals, mirrored targets and completion rules;
+- compare the enriched policies with a same-date no-extra-feature ablation;
+- report training-seed sensitivity rather than selecting the best seed.
+
 ## Implemented pilot protocol
 
 - Library implementations: Stable-Baselines3 SAC/PPO and SB3-Contrib

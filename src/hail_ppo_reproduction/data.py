@@ -17,6 +17,7 @@ class TradingDay:
     signals: NDArray[np.float64]
     target_position: float
     return_volatility: float
+    extra_features: NDArray[np.float64] | None = None
 
     def __post_init__(self) -> None:
         if self.prices.ndim != 1 or self.signals.ndim != 1:
@@ -33,6 +34,13 @@ class TradingDay:
             raise ValueError("target_position cannot be zero")
         if self.return_volatility <= 0:
             raise ValueError("return_volatility must be positive")
+        if self.extra_features is not None:
+            if self.extra_features.ndim != 2:
+                raise ValueError("extra_features must be two-dimensional")
+            if len(self.extra_features) != len(self.signals):
+                raise ValueError("extra_features must align with decision steps")
+            if not np.all(np.isfinite(self.extra_features)):
+                raise ValueError("extra_features must be finite")
 
 
 def make_synthetic_day(

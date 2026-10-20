@@ -27,14 +27,28 @@ class ExecutionEnv(gym.Env):
         self,
         day_factory: DayFactory,
         config: Optional[ExecutionConfig] = None,
+        extra_feature_count: int = 0,
     ) -> None:
         super().__init__()
         self.day_factory = day_factory
         self.config = config or ExecutionConfig()
+        if extra_feature_count < 0:
+            raise ValueError("extra_feature_count cannot be negative")
+        self.extra_feature_count = extra_feature_count
         self.action_space = spaces.Box(0.0, 1.0, shape=(1,), dtype=np.float32)
         self.observation_space = spaces.Box(
-            low=np.array([-8.0, 0.0, 0.0, -8.0, 0.0], dtype=np.float32),
-            high=np.array([8.0, 1.0, 1.0, 8.0, 1000.0], dtype=np.float32),
+            low=np.concatenate(
+                (
+                    np.array([-8.0, 0.0, 0.0, -8.0, 0.0], dtype=np.float32),
+                    np.full(extra_feature_count, -8.0, dtype=np.float32),
+                )
+            ),
+            high=np.concatenate(
+                (
+                    np.array([8.0, 1.0, 1.0, 8.0, 1000.0], dtype=np.float32),
+                    np.full(extra_feature_count, 8.0, dtype=np.float32),
+                )
+            ),
             dtype=np.float32,
         )
         self.day: Optional[TradingDay] = None
@@ -66,6 +80,13 @@ class ExecutionEnv(gym.Env):
     ) -> Tuple[NDArray[np.float32], Dict[str, float]]:
         super().reset(seed=seed)
         self.day = self.day_factory(self.np_random)
+        actual_feature_count = (
+            0 if self.day.extra_features is None else self.day.extra_features.shape[1]
+        )
+        if actual_feature_count != self.extra_feature_count:
+            raise ValueError(
+                "day extra feature count does not match environment configuration"
+            )
         self.step_index = 0
         self.position = 0.0
         self.cumulative_pnl = 0.0
@@ -134,7 +155,7 @@ class ExecutionEnv(gym.Env):
             )
 
         total_steps = len(self.day.signals)  # type: ignore[union-attr]
-        return np.array(
+        base_observation = np.array(
             [
                 np.clip(directed_signal_z, -8.0, 8.0),
                 1.0 - self.fill_fraction,
@@ -144,6 +165,17 @@ class ExecutionEnv(gym.Env):
             ],
             dtype=np.float32,
         )
+        if not self.extra_feature_count:
+            return base_observation
+        if terminal:
+            extra = np.zeros(self.extra_feature_count, dtype=np.float32)
+        else:
+            assert self.day.extra_features is not None  # type: ignore[union-attr]
+            extra = self.day.extra_features[self.step_index].astype(  # type: ignore[union-attr]
+                np.float32,
+                copy=False,
+            )
+        return np.concatenate((base_observation, extra))
 
     def _info(
         self,

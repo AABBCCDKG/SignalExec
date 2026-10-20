@@ -1,63 +1,126 @@
-# HAIL PPO Reproduction
+# SignalExec
 
-An independent reproduction and extension of Hudson River Trading AI Labs' 2026 intern project on reinforcement learning for optimal execution.
+A reproducible benchmark for comparing how execution policies turn the same
+trading signal and target position into a sequence of trades.
 
-Source article: [Intern Spotlight: HRT AI Labs Project](https://www.hudsonrivertrading.com/hrtbeat/intern-spotlight-hrt-ai-labs-project-2026/)
+**Interactive results:** <https://aabbccddkg.github.io/SignalExec/>
 
-## Goal
+SignalExec is an independent research extension inspired by Hudson River
+Trading AI Labs' public
+[intern project](https://www.hudsonrivertrading.com/hrtbeat/intern-spotlight-hrt-ai-labs-project-2026/).
+It does not reproduce HRT's private data, simulator, reward, or architecture.
 
-Investigate whether the article's qualitative findings hold on a transparent research testbed:
+## Research question
 
-1. compare a hand-written execution rule, SAC, PPO, and memory-augmented PPO;
-2. test every policy out of sample across different signal-accuracy levels;
-3. report both trading PnL and target-position fill fraction;
-4. investigate the under-filling observed in the article.
+Given the same buy/sell signal and target position, which execution policy
+should trade now, how much of the remaining order should it execute, and how
+does that answer change with the decision interval?
 
-This repository does **not** claim to reconstruct HRT's private data, simulator, reward, or model architecture. Unknown details are explicit assumptions in [the reproduction specification](docs/reproduction-spec.md).
+The benchmark formulates execution as inventory-aware continuous control. The
+state combines directed signal strength, remaining inventory, time-to-deadline,
+recent returns, volatility, and point-in-time microstructure features. An action
+is the fraction of the remaining quantity to execute; rewards include
+mark-to-market PnL, fees, linear impact, and a terminal completion penalty.
 
-## Current milestone
+## Experiment
 
-The repository includes a synthetic simulator and a complete training/evaluation pilot:
+- **Markets:** BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT, XRPUSDT.
+- **Decision intervals:** 1m, 3m, 5m, 15m, 30m.
+- **Policies:** HAIL-inspired rule, TWAP, immediate, wait, SAC, PPO, and
+  Recurrent PPO.
+- **Features:** quote volume, raw-trade count, aggressor imbalance, average
+  trade size, price range and return, largest-trade share, and aggressor-side
+  switching.
+- **Scale:** 45 learned policies with equal sampled-episode budgets and three
+  initialization seeds.
 
-- a one-day execution environment in which actions can only move toward a fixed target position;
-- a noisy short-term return signal with configurable predictiveness;
-- mark-to-market PnL, transaction costs, and a terminal under-fill penalty;
-- the article's hand-written baseline translated into the environment's action space;
-- tests for accounting, action constraints, timing incentives, and baseline behavior;
-- SAC and PPO from Stable-Baselines3, plus LSTM PPO from SB3-Contrib;
-- matched evaluation days, independent training seeds, and a signal-correlation sweep;
-- TWAP, immediate-execution, and no-trade controls;
-- a paired final-step completion intervention to measure its effect on PnL and fill;
-- saved models, training logs, episode-level CSV, configuration, source hashes and plots.
+Controlled signals deliberately mix realized next returns with common noise so
+their quality is known. They are oracle experiment inputs, not tradable
+forecasts. Mirrored buy/sell targets, common signal hashes, mandatory completion,
+and matched TWAP comparisons isolate execution-policy behavior from market
+direction and signal quality.
 
-The [first pilot results](docs/pilot-results.md) document unsuccessful execution
-policies and the limitations of this synthetic control experiment.
+## Evaluation protocol
 
-## Run
+1. Build checksum-verified, point-in-time feature caches from Binance public
+   archives.
+2. Train before 2025 and select nothing from the final test window.
+3. Evaluate on calendar-2025 validation data.
+4. Replay frozen PPO models and require byte-identical episode, first-difference,
+   and difference-in-differences outputs.
+5. Open May-August 2026 once for the five-interval locked comparison.
+
+Every interval passed the fill, signal-hash, TWAP-identity, and `rho=0`
+difference-in-differences gates. The complete protocol and result lineage are in
+[the research log](docs/research-log.md).
+
+## Locked-test results
+
+At controlled signal quality `rho=0.8`, positive values mean lower
+implementation shortfall than matched TWAP, in basis points.
+
+| Interval | HAIL | SAC mean | PPO mean | Recurrent PPO mean |
+|---|---:|---:|---:|---:|
+| 1m | -2.763 | -0.795 | +3.670 | -0.033 |
+| 3m | -0.448 | -1.017 | +1.831 | +0.610 |
+| 5m | +2.684 | -2.617 | -0.050 | +3.479 |
+| 15m | +7.619 | -2.924 | +8.149 | +0.186 |
+| 30m | +13.568 | +6.682 | -0.693 | -0.154 |
+
+The central finding is that decision frequency is a policy variable rather
+than a neutral resampling choice. The same handcrafted rule trails TWAP at 1m
+and 3m but becomes strong at slower intervals; learned-policy means also remain
+sensitive to initialization. See
+[the full seed-level results](docs/interval-matrix-results.md).
+
+## Reproduce
+
+Requires Python 3.11+ and [`uv`](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync --extra dev --extra rl
-uv run --extra dev --extra rl pytest
-uv run python scripts/run_baseline.py
-
-# Fast end-to-end check (not evidence of convergence).
-uv run --extra rl python scripts/run_experiment.py \
-  --output artifacts/smoke --timesteps 512 --seeds 0 \
-  --eval-episodes 4 --accuracies 0 0.8 --steps 8
-
-# Pilot: three training seeds per algorithm, five evaluation correlations.
-uv run --extra rl python scripts/run_experiment.py --output artifacts/iid-pilot
+uv run --extra dev --extra rl pytest -q
 ```
 
-Use Python 3.11 or later. On networks using a system-installed CA, add
-`--system-certs` to `uv` if installation reports `UnknownIssuer`.
-Each run requires a new output directory and refuses to overwrite previous results.
-`artifacts/` is ignored by Git; model files and raw runs stay local.
+Binance archives, derived caches, trained models, and experiment artifacts stay
+local and are ignored by Git. Downloaders verify official adjacent SHA-256
+files before aggregation. The preregistered five-interval design and budgets are
+recorded in [the protocol](docs/interval-matrix-protocol.md).
 
-The current IID market is a pipeline test and an execution control problem. Its
-history has no extra information about future returns, so a recurrent policy has
-no additional return-prediction advantage by construction. The synthetic signal
-is a controlled noisy oracle, not a trained, tradable forecast. Results do not
-establish HRT's reported ordering or performance on real market data. The next
-research stage needs chronological historical-data splits and an explicit test
-of what information memory can recover.
+Representative commands:
+
+```bash
+# Download checksum-verified price bars.
+uv run python scripts/download_binance.py \
+  --output data/binance/BTCUSDT-3m --symbol BTCUSDT --interval 3m \
+  --months 2026-06 2026-07 2026-08 2026-09
+
+# Stream compressed trades into a point-in-time feature cache.
+uv run python scripts/aggregate_binance_trades.py \
+  --data-dir data/binance/BTCUSDT-trades \
+  --cache data/binance/BTCUSDT-trades-3m.npz \
+  --symbol BTCUSDT --months 2026-05 2026-06 2026-07 2026-08 \
+  --workers 2 --bucket-minutes 3
+```
+
+## Dashboard
+
+The static dashboard is generated from merged locked-test CSVs by
+`scripts/export_interval_dashboard.py`. Serve it locally with:
+
+```bash
+python3 -m http.server 8000 --directory dashboard
+```
+
+Then open <http://localhost:8000/>. GitHub Pages deploys the same `dashboard/`
+directory through [the Pages workflow](.github/workflows/pages.yml).
+
+## Limitations
+
+- Controlled signals contain future information by design and do not establish
+  alpha or forecast quality.
+- The simulator assumes immediate bar-open fills with explicit linear fees and
+  impact; it does not model spread, queue position, a historical order book, or
+  counterfactual market impact.
+- Results compare execution responses on five Binance Spot symbols and do not
+  establish live profitability or production capacity.

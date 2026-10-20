@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "hail-ppo-reproduction"
+name = "signal-to-execution-rl"
 version = "0.1.0"
-description = "Reproduction of HRT AI Labs' reinforcement-learning optimal-execution project"
+description = "Multi-scale benchmark for signal-conditioned order execution"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

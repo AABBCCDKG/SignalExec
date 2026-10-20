@@ -87,3 +87,23 @@ def test_seeded_market_resets_are_reproducible():
     np.testing.assert_array_equal(env.day.prices, first_prices)
     np.testing.assert_array_equal(env.day.signals, first_signals)
     assert env.day.target_position == first_target
+
+
+def test_extra_features_are_appended_and_zeroed_at_terminal():
+    day = TradingDay(
+        prices=np.array([100.0, 101.0, 102.0]),
+        signals=np.array([0.0, 0.0]),
+        target_position=1.0,
+        return_volatility=0.01,
+        extra_features=np.array([[1.5, -2.0], [0.5, 3.0]]),
+    )
+    env = ExecutionEnv(lambda rng: day, extra_feature_count=2)
+
+    observation, _ = env.reset(seed=1)
+    np.testing.assert_array_equal(observation[-2:], np.array([1.5, -2.0]))
+    observation, _, _, _, _ = env.step(np.array([0.5], dtype=np.float32))
+    np.testing.assert_array_equal(observation[-2:], np.array([0.5, 3.0]))
+    observation, _, terminated, _, _ = env.step(np.array([1.0], dtype=np.float32))
+
+    assert terminated
+    np.testing.assert_array_equal(observation[-2:], np.zeros(2))
