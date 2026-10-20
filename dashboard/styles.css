@@ -263,6 +263,11 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
   background: var(--white);
 }
 
+.legend .range {
+  width: 20px;
+  border-top: 1px solid var(--seed);
+}
+
 .chart {
   position: relative;
   display: grid;
@@ -413,12 +418,10 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
   stroke-width: 1.5;
 }
 
-.positive-stem { stroke: var(--positive); }
-.negative-stem { stroke: var(--negative); }
-
 .range-line {
-  stroke: var(--line);
-  stroke-width: 5;
+  stroke: var(--seed);
+  stroke-width: 1.4;
+  stroke-linecap: round;
 }
 
 .mean-diamond {

@@ -186,7 +186,7 @@ function drawTwap(dataset) {
   const row = (height - top - bottom) / dataset.methods.length;
   const chart = svg("svg", { viewBox: `0 0 ${width} ${height}`, class: "chart-svg", preserveAspectRatio: "xMidYMid meet" });
 
-  title(chart, "Advantage versus TWAP", "Diamonds are method means. Circles are individual training seeds. Positive values indicate lower implementation shortfall than TWAP.");
+  title(chart, "Improvement versus TWAP", "Diamonds are method means. Circles are individual training seeds, connected by their minimum-to-maximum range. Positive values indicate lower implementation shortfall than TWAP.");
   ticks(xMin, xMax).forEach((value) => {
     const xPos = x(value);
     chart.appendChild(svg("line", {
@@ -201,38 +201,27 @@ function drawTwap(dataset) {
 
   dataset.methods.forEach((method, index) => {
     const y = top + row * index + row / 2;
-    const zero = x(0);
     const mean = x(method.mean);
     const minSeed = Math.min(...method.seeds);
     const maxSeed = Math.max(...method.seeds);
+    const hasMultipleSeeds = method.seeds.length > 1;
     text(chart, { x: left - 16, y: y + 4, "text-anchor": "end", class: "axis-label" }, method.label);
-    chart.appendChild(svg("line", { x1: x(minSeed), x2: x(maxSeed), y1: y, y2: y, pathLength: 1, class: "range-line animated-path" }));
-    chart.appendChild(svg("line", {
-      x1: zero,
-      x2: mean,
-      y1: y,
-      y2: y,
-      pathLength: 1,
-      class: `${method.mean >= 0 ? "positive-stem" : "negative-stem"} animated-path`,
-      "stroke-width": 4
-    }));
-    method.seeds.forEach((value, seedIndex) => {
-      point(chart, { cx: x(value), cy: y, r: 5.5, class: "twap-seed" }, `${method.label} seed ${seedIndex}: ${signed(value)} bps`, seedIndex);
-    });
-    const diamond = svg("rect", {
-      x: mean - 6,
-      y: y - 6,
-      width: 12,
-      height: 12,
-      transform: `rotate(45 ${mean} ${y})`,
+    if (hasMultipleSeeds) {
+      chart.appendChild(svg("line", { x1: x(minSeed), x2: x(maxSeed), y1: y, y2: y, pathLength: 1, class: "range-line animated-path" }));
+      method.seeds.forEach((value, seedIndex) => {
+        point(chart, { cx: x(value), cy: y, r: 5.5, class: "twap-seed" }, `${method.label} seed ${seedIndex}: ${signed(value)} bps`, seedIndex);
+      });
+    }
+    const diamond = svg("polygon", {
+      points: `${mean},${y - 8} ${mean + 8},${y} ${mean},${y + 8} ${mean - 8},${y}`,
       class: "mean-diamond chart-point"
     });
     diamond.style.setProperty("--point-order", 3);
-    diamond.appendChild(svg("title", {}, `${method.label} mean: ${signed(method.mean)} bps`));
+    diamond.appendChild(svg("title", {}, `${method.label}${hasMultipleSeeds ? " mean" : ""}: ${signed(method.mean)} bps`));
     chart.appendChild(diamond);
     text(chart, { x: mean, y: y - 15, "text-anchor": "middle", class: "axis-label" }, signed(method.mean));
   });
-  text(chart, { x: width - right, y: 16, "text-anchor": "end", class: "axis-label" }, "← worse   better →");
+  text(chart, { x: width - right, y: 16, "text-anchor": "end", class: "axis-label" }, "Improvement vs TWAP (bps)  ·  ← worse   better →");
 
   mount.replaceChildren(chart);
   reveal(mount);
