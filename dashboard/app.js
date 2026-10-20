@@ -157,11 +157,6 @@ function signalPanel(dataset, series, yMin, yMax) {
     node("span", "signal-panel-value", `rho=0.8 ${signed(series.mean[last])}`)
   );
   panel.append(header);
-  if (series.id === "rule_based") {
-    panel.append($("#rule-formula-template").content.cloneNode(true));
-  } else if (series.description) {
-    panel.append(node("p", "signal-panel-description", series.description));
-  }
   panel.append(chart);
   return panel;
 }

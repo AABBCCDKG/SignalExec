@@ -47,6 +47,53 @@
             </div>
           </div>
         </div>
+        <aside class="rule-definition" aria-labelledby="rule-definition-title">
+          <div class="rule-definition-heading">
+            <strong id="rule-definition-title">Rule-Based Baseline</strong>
+            <span>Deterministic execution rule</span>
+          </div>
+          <math display="block" aria-label="Rule-Based Baseline action as a piecewise function">
+            <mrow>
+              <msub><mi>a</mi><mi>t</mi></msub>
+              <mo>=</mo>
+              <mrow>
+                <mo fence="true">{</mo>
+                <mtable columnalign="left left" rowspacing="0.35em" columnspacing="0.7em">
+                  <mtr>
+                    <mtd><mn>1</mn></mtd>
+                    <mtd><mrow><mtext>if </mtext><msub><mi>N</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mfrac><mn>1</mn><msub><mi>N</mi><mi>t</mi></msub></mfrac></mtd>
+                    <mtd><mrow><mtext>if </mtext><msub><mi>s</mi><mi>t</mi></msub><mo>></mo><mn>0</mn></mrow></mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mn>1</mn></mtd>
+                    <mtd>
+                      <mrow>
+                        <mtext>if </mtext><msub><mi>s</mi><mi>t</mi></msub><mo>≤</mo><mn>0</mn>
+                        <mtext> and </mtext>
+                        <mfrac><mrow><msub><mi>q</mi><mi>t</mi></msub><mi>T</mi></mrow><msub><mi>N</mi><mi>t</mi></msub></mfrac>
+                        <mo>></mo>
+                        <mfrac><mrow><mn>4</mn><msub><mi>σ</mi><mi>t</mi></msub></mrow><mn>0.002</mn></mfrac>
+                      </mrow>
+                    </mtd>
+                  </mtr>
+                  <mtr>
+                    <mtd><mn>0</mn></mtd>
+                    <mtd><mtext>otherwise</mtext></mtd>
+                  </mtr>
+                </mtable>
+              </mrow>
+            </mrow>
+          </math>
+          <dl class="formula-key">
+            <div><dt><var>a<sub>t</sub></var></dt><dd>remaining-order fraction</dd></div>
+            <div><dt><var>s<sub>t</sub></var></dt><dd>directed signal</dd></div>
+            <div><dt><var>q<sub>t</sub>T/N<sub>t</sub></var></dt><dd>urgency rate</dd></div>
+            <div><dt><var>σ<sub>t</sub></var></dt><dd>return volatility</dd></div>
+          </dl>
+        </aside>
         <div class="chart chart-main" id="signal-chart"></div>
       </section>
 
@@ -64,47 +111,6 @@
         <div class="chart chart-twap" id="twap-chart"></div>
       </section>
     </main>
-
-    <template id="rule-formula-template">
-      <div class="policy-formula">
-        <math display="block" aria-label="Rule-Based Baseline action as a piecewise function">
-          <mrow>
-            <msub><mi>a</mi><mi>t</mi></msub>
-            <mo>=</mo>
-            <mrow>
-              <mo fence="true">{</mo>
-              <mtable columnalign="left left" rowspacing="0.35em" columnspacing="0.7em">
-                <mtr>
-                  <mtd><mn>1</mn></mtd>
-                  <mtd><mrow><mtext>if </mtext><msub><mi>N</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow></mtd>
-                </mtr>
-                <mtr>
-                  <mtd><mfrac><mn>1</mn><msub><mi>N</mi><mi>t</mi></msub></mfrac></mtd>
-                  <mtd><mrow><mtext>if </mtext><msub><mi>s</mi><mi>t</mi></msub><mo>></mo><mn>0</mn></mrow></mtd>
-                </mtr>
-                <mtr>
-                  <mtd><mn>1</mn></mtd>
-                  <mtd>
-                    <mrow>
-                      <mtext>if </mtext><msub><mi>s</mi><mi>t</mi></msub><mo>≤</mo><mn>0</mn>
-                      <mtext> and </mtext>
-                      <mfrac><mrow><msub><mi>q</mi><mi>t</mi></msub><mi>T</mi></mrow><msub><mi>N</mi><mi>t</mi></msub></mfrac>
-                      <mo>></mo>
-                      <mfrac><mrow><mn>4</mn><msub><mi>σ</mi><mi>t</mi></msub></mrow><mn>0.002</mn></mfrac>
-                    </mrow>
-                  </mtd>
-                </mtr>
-                <mtr>
-                  <mtd><mn>0</mn></mtd>
-                  <mtd><mtext>otherwise</mtext></mtd>
-                </mtr>
-              </mtable>
-            </mrow>
-          </mrow>
-        </math>
-        <p><var>a<sub>t</sub></var>: remaining-order fraction · <var>s<sub>t</sub></var>: directed signal · <var>q<sub>t</sub>T/N<sub>t</sub></var>: urgency · <var>σ<sub>t</sub></var>: volatility</p>
-      </div>
-    </template>
 
     <noscript><p class="load-error">JavaScript is required to load the experiment JSON.</p></noscript>
   </body>

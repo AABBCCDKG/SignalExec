@@ -291,33 +291,63 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
   white-space: nowrap;
 }
 
-.signal-panel-description {
-  min-height: 100px;
-  margin: 5px 0 2px;
+.rule-definition {
+  display: grid;
+  margin-top: 24px;
+  padding: 14px 16px;
+  grid-template-columns: 170px minmax(360px, 1.35fr) minmax(300px, 1fr);
+  gap: 18px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+}
+
+.rule-definition-heading strong {
+  display: block;
+  font-size: 14px;
+}
+
+.rule-definition-heading span {
+  display: block;
+  margin-top: 4px;
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 9px;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
+  font-size: 8px;
 }
 
-.policy-formula {
-  min-height: 100px;
-  margin: 5px 0 2px;
-  color: var(--ink);
-}
-
-.policy-formula math {
+.rule-definition math {
   width: 100%;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.formula-key {
+  display: grid;
+  margin: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 14px;
+}
+
+.formula-key div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px;
+  align-items: baseline;
+}
+
+.formula-key dt,
+.formula-key dd { margin: 0; }
+
+.formula-key dt {
+  color: var(--ink);
   font-size: 11px;
 }
 
-.policy-formula p {
-  margin: 4px 0 0;
+.formula-key dd {
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 7.5px;
+  font-size: 8px;
   line-height: 1.35;
 }
 
@@ -516,12 +546,18 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
     margin-top: 24px;
   }
 
+  .rule-definition { grid-template-columns: 1fr; }
+  .rule-definition .formula-key { grid-column: auto; }
+
   .signal-panel-head { flex-wrap: wrap; }
 
 }
 
 @media (min-width: 721px) and (max-width: 1080px) {
   .chart-main { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .rule-definition { grid-template-columns: 150px 1fr; }
+  .rule-definition .formula-key { grid-column: 1 / -1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
