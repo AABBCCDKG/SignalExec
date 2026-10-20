@@ -18,14 +18,13 @@
       </fieldset>
     </header>
 
-    <div class="run-status" id="interval-status" role="status" aria-live="polite"></div>
-
     <main id="results">
       <section class="plot-section plot-section-primary" aria-labelledby="signal-title">
         <div class="plot-head">
           <div>
             <h1 id="signal-title">Signal quality response</h1>
-            <p id="signal-scope">Selected interval status</p>
+            <p id="signal-scope">Training + validation: Jun 2023–Dec 2025<br />Test: May–Aug 2026</p>
+            <p class="rho-definition"><strong>rho</strong> controls signal quality: signal = rho × next return + sqrt(1 − rho²) × noise. rho=0 is noise; rho=0.8 is strong.</p>
           </div>
           <div class="plot-tools" id="signal-tools">
             <div class="legend" aria-label="Chart legend">
@@ -40,7 +39,7 @@
       <section class="plot-section" aria-labelledby="twap-title">
         <div class="plot-head">
           <div>
-            <h2 id="twap-title">vs TWAP</h2>
+            <h2 id="twap-title">vs TWAP at rho=0.8</h2>
             <p id="twap-scope">No result for selected interval</p>
           </div>
           <div class="legend" id="twap-legend" aria-label="Chart legend">
@@ -49,10 +48,9 @@
             <span><i class="legend-seed range"></i>Seed range</span>
           </div>
         </div>
+        <p class="conclusion" id="conclusion"></p>
         <div class="chart chart-twap" id="twap-chart"></div>
       </section>
-
-      <p class="conclusion" id="conclusion"></p>
     </main>
 
     <noscript><p class="load-error">JavaScript is required to load the experiment JSON.</p></noscript>

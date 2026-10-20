@@ -9,6 +9,7 @@ from statistics import mean
 
 INTERVALS = ("1m", "3m", "5m", "15m", "30m")
 RHOS = (0.0, 0.2, 0.4, 0.6, 0.8)
+PERIOD_SCOPE = "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026"
 METHODS = (
     ("hail_baseline", "rule_based", "Rule-Based Baseline"),
     ("sac", "sac", "SAC"),
@@ -17,8 +18,11 @@ METHODS = (
 )
 DESCRIPTIONS = {
     "hail_baseline": (
-        "Favorable signal → trade one TWAP slice; otherwise wait until remaining "
-        "inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+        "aₜ = 1/Nₜ  if sₜ > 0\n"
+        "aₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\n"
+        "aₜ = 0     otherwise; final step: aₜ = 1\n"
+        "aₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; "
+        "Nₜ/T: time left; σₜ: volatility."
     ),
     "sac": "Off-policy actor-critic trained with replayed execution transitions.",
     "ppo": "On-policy actor-critic trained with clipped policy updates.",
@@ -111,15 +115,15 @@ def main() -> None:
         did = read_csv(root / "difference_in_differences.csv")
         advantages = read_csv(root / "advantage_summary.csv")
         entry = entries[interval]
+        entry.pop("statusLabel", None)
+        entry.pop("progress", None)
         entry.update(
             {
                 "status": "complete",
-                "statusLabel": "5 symbols · Jun 2023–Aug 2026 · complete",
-                "progress": 100.0,
                 "conclusion": CONCLUSIONS[interval],
                 "chartData": {
                     "signalResponse": {
-                        "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
+                        "scope": PERIOD_SCOPE,
                         "rhos": list(RHOS),
                         "series": [
                             series_for(did, algorithm, public_id, label)
@@ -127,7 +131,7 @@ def main() -> None:
                         ],
                     },
                     "vsTwap": {
-                        "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
+                        "scope": PERIOD_SCOPE,
                         "methods": [
                             method_for(advantages, algorithm, public_id, label)
                             for algorithm, public_id, label in METHODS

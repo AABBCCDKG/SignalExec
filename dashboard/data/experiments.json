@@ -8,10 +8,9 @@
       "id": "1m",
       "label": "1m",
       "status": "complete",
-      "statusLabel": "5 symbols · Jun 2023–Aug 2026 · complete",
       "chartData": {
         "signalResponse": {
-          "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "rhos": [
             0.0,
             0.2,
@@ -39,7 +38,7 @@
                   -2.213549819300471
                 ]
               ],
-              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
             },
             {
               "id": "sac",
@@ -149,7 +148,7 @@
           ]
         },
         "vsTwap": {
-          "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "methods": [
             {
               "id": "rule_based",
@@ -192,19 +191,16 @@
           ]
         }
       },
-      "progress": 100.0,
       "conclusion": "PPO leads on mean; Rule-Based and SAC trail TWAP."
     },
     {
       "id": "3m",
       "label": "3m",
       "status": "complete",
-      "statusLabel": "5 symbols · Jun 2023–Aug 2026 · complete",
-      "progress": 100.0,
       "conclusion": "PPO leads on mean but remains seed-sensitive.",
       "chartData": {
         "signalResponse": {
-          "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "rhos": [
             0.0,
             0.2,
@@ -232,7 +228,7 @@
                   -0.11124317830157357
                 ]
               ],
-              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
             },
             {
               "id": "sac",
@@ -342,7 +338,7 @@
           ]
         },
         "vsTwap": {
-          "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "methods": [
             {
               "id": "rule_based",
@@ -390,10 +386,9 @@
       "id": "5m",
       "label": "5m",
       "status": "complete",
-      "statusLabel": "5 symbols · Jun 2023–Aug 2026 · complete",
       "chartData": {
         "signalResponse": {
-          "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "rhos": [
             0.0,
             0.2,
@@ -421,7 +416,7 @@
                   3.046275389922943
                 ]
               ],
-              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
             },
             {
               "id": "sac",
@@ -531,7 +526,7 @@
           ]
         },
         "vsTwap": {
-          "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "methods": [
             {
               "id": "rule_based",
@@ -574,17 +569,15 @@
           ]
         }
       },
-      "progress": 100.0,
       "conclusion": "Rule-Based is positive; Memory-PPO is driven by one seed."
     },
     {
       "id": "15m",
       "label": "15m",
       "status": "complete",
-      "statusLabel": "5 symbols · Jun 2023–Aug 2026 · complete",
       "chartData": {
         "signalResponse": {
-          "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "rhos": [
             0.0,
             0.2,
@@ -612,7 +605,7 @@
                   7.542566757330887
                 ]
               ],
-              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
             },
             {
               "id": "sac",
@@ -722,7 +715,7 @@
           ]
         },
         "vsTwap": {
-          "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "methods": [
             {
               "id": "rule_based",
@@ -765,17 +758,15 @@
           ]
         }
       },
-      "progress": 100.0,
       "conclusion": "Rule-Based and PPO beat TWAP; PPO remains dispersed."
     },
     {
       "id": "30m",
       "label": "30m",
       "status": "complete",
-      "statusLabel": "5 symbols · Jun 2023–Aug 2026 · complete",
       "chartData": {
         "signalResponse": {
-          "scope": "History Jun 2023–Aug 2026 · locked test May–Aug 2026",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "rhos": [
             0.0,
             0.2,
@@ -803,7 +794,7 @@
                   13.386265161830712
                 ]
               ],
-              "description": "Favorable signal → trade one TWAP slice; otherwise wait until remaining inventory crosses a volatility-scaled urgency threshold, then finish immediately."
+              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
             },
             {
               "id": "sac",
@@ -913,7 +904,7 @@
           ]
         },
         "vsTwap": {
-          "scope": "History Jun 2023–Aug 2026 · locked test rho=0.8",
+          "scope": "Training + validation: Jun 2023–Dec 2025\nTest: May–Aug 2026",
           "methods": [
             {
               "id": "rule_based",
@@ -956,7 +947,6 @@
           ]
         }
       },
-      "progress": 100.0,
       "conclusion": "Rule-Based leads; SAC turns positive but remains dispersed."
     }
   ]

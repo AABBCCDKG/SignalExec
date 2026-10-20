@@ -124,54 +124,6 @@ input { font: inherit; }
   outline-offset: 2px;
 }
 
-.run-status {
-  display: flex;
-  min-height: 31px;
-  padding: 7px max(20px, calc((100% - var(--width)) / 2));
-  gap: 9px;
-  align-items: center;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.035em;
-}
-
-.run-status-label { flex: 1; }
-
-.run-progress-value {
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.run-progress {
-  width: clamp(84px, 13vw, 160px);
-  height: 2px;
-  overflow: hidden;
-  border: 0;
-  border-radius: 999px;
-  appearance: none;
-  background: var(--line);
-}
-
-.run-progress::-webkit-progress-bar { background: var(--line); }
-.run-progress::-webkit-progress-value { background: var(--negative); }
-.run-progress::-moz-progress-bar { background: var(--negative); }
-
-.run-status::before {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background: var(--positive);
-  content: "";
-}
-
-.run-status[data-status="in-progress"]::before { background: var(--negative); }
-.run-status[data-status="data-ready"]::before,
-.run-status[data-status="planned"]::before { background: var(--waiting); }
-
 [hidden] { display: none !important; }
 
 main {
@@ -215,6 +167,13 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
   color: var(--muted);
   font-family: var(--mono);
   font-size: 10px;
+  white-space: pre-line;
+}
+
+.plot-head .rho-definition {
+  max-width: 780px;
+  margin-top: 10px;
+  color: var(--ink);
 }
 
 .plot-tools {
@@ -319,13 +278,14 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
 }
 
 .signal-panel-description {
-  min-height: 42px;
+  min-height: 74px;
   margin: 5px 0 2px;
   color: var(--muted);
   font-family: var(--mono);
   font-size: 9px;
   line-height: 1.4;
   overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .signal-panel .chart-svg {
@@ -458,8 +418,8 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
 
 .conclusion {
   max-width: 720px;
-  margin: 0;
-  padding: 28px 0 42px;
+  margin: 20px 0 0;
+  padding: 0;
   color: var(--ink);
   font-size: 15px;
   font-weight: 600;
@@ -495,8 +455,6 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
     padding-left: 4px;
   }
 
-  .run-status { padding-right: 16px; padding-left: 16px; }
-
   main { width: min(calc(100% - 28px), var(--width)); }
 
   .plot-section,
@@ -531,7 +489,8 @@ h2 { font-size: clamp(23px, 2.6vw, 31px); }
   .signal-panel-head { flex-wrap: wrap; }
 
   .conclusion {
-    padding: 22px 0 34px;
+    margin-top: 18px;
+    padding: 0;
     font-size: 14px;
   }
 }

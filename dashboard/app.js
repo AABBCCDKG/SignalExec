@@ -126,7 +126,7 @@ function signalPanel(dataset, series, yMin, yMax) {
   axes(chart, {
     width, height, left, right, top, bottom, yMin, yMax, y, x,
     xValues: dataset.rhos,
-    xLabel: (value) => `ρ=${value}`,
+    xLabel: (value) => `rho=${value}`,
     yLabel: "signal increment (bps)"
   });
 
@@ -154,7 +154,7 @@ function signalPanel(dataset, series, yMin, yMax) {
   const header = node("div", "signal-panel-head");
   header.append(
     node("h3", "", series.label),
-    node("span", "signal-panel-value", `ρ=0.8 ${signed(series.mean[last])}`)
+    node("span", "signal-panel-value", `rho=0.8 ${signed(series.mean[last])}`)
   );
   panel.append(header);
   if (series.description) panel.append(node("p", "signal-panel-description", series.description));
@@ -241,18 +241,6 @@ function empty(mount, interval, kind) {
 
 function renderInterval() {
   const interval = state.data.intervals.find((item) => item.id === state.interval);
-  const status = $("#interval-status");
-  status.dataset.status = interval.status;
-  status.replaceChildren(node("span", "run-status-label", `${interval.label} · ${interval.statusLabel}`));
-  if (Number.isFinite(interval.progress)) {
-    const value = node("span", "run-progress-value", `${interval.progress.toFixed(1)}%`);
-    const progress = document.createElement("progress");
-    progress.className = "run-progress";
-    progress.max = 100;
-    progress.value = interval.progress;
-    progress.setAttribute("aria-label", `Overall experiment progress ${interval.progress.toFixed(1)}%`);
-    status.append(value, progress);
-  }
   $("#conclusion").textContent = interval.conclusion || "";
 
   if (!interval.chartData) {
@@ -260,7 +248,7 @@ function renderInterval() {
     $("#twap-legend").hidden = true;
     empty($("#signal-chart"), interval, "signal");
     empty($("#twap-chart"), interval, "twap");
-    $("#signal-scope").textContent = `${interval.label} · ${interval.statusLabel}`;
+    $("#signal-scope").textContent = `${interval.label} · results pending`;
     $("#twap-scope").textContent = `${interval.label} · no result`;
     return;
   }
@@ -285,7 +273,6 @@ function renderControls() {
     input.checked = interval.id === state.interval;
     const label = node("label", "", interval.label);
     label.htmlFor = input.id;
-    label.title = interval.statusLabel;
     wrap.append(input, label);
     root.appendChild(wrap);
   });
@@ -306,8 +293,8 @@ async function init() {
     renderControls();
     renderInterval();
   } catch (error) {
-    $("#interval-status").dataset.status = "in-progress";
-    $("#interval-status").textContent = `Data load error · ${error.message}`;
+    $("#signal-scope").textContent = `Data load error · ${error.message}`;
+    $("#twap-scope").textContent = "No comparison available";
     empty($("#signal-chart"), { label: "Data", status: "data-ready" }, "signal");
     empty($("#twap-chart"), { label: "Data", status: "data-ready" }, "twap");
   }
