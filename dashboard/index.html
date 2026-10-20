@@ -24,7 +24,21 @@
           <div>
             <h1 id="signal-title">Signal quality response</h1>
             <p id="signal-scope">Training + validation: Jun 2023–Dec 2025<br />Test: May–Aug 2026</p>
-            <p class="rho-definition"><strong>rho</strong> controls signal quality: signal = rho × next return + sqrt(1 − rho²) × noise. rho=0 is noise; rho=0.8 is strong.</p>
+            <div class="rho-definition">
+              <span><strong>rho</strong> is the signal–next-return correlation:</span>
+              <math aria-label="signal equals rho times the next return plus square root of one minus rho squared times noise">
+                <mrow>
+                  <msub><mi>s</mi><mi>t</mi></msub>
+                  <mo>=</mo>
+                  <mi>ρ</mi>
+                  <msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub>
+                  <mo>+</mo>
+                  <msqrt><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mn>2</mn></msup></mrow></msqrt>
+                  <msub><mi>ε</mi><mi>t</mi></msub>
+                </mrow>
+              </math>
+              <span class="rho-scale">rho=0 → noise; rho=0.8 → strong signal</span>
+            </div>
           </div>
           <div class="plot-tools" id="signal-tools">
             <div class="legend" aria-label="Chart legend">
@@ -39,8 +53,7 @@
       <section class="plot-section" aria-labelledby="twap-title">
         <div class="plot-head">
           <div>
-            <h2 id="twap-title">vs TWAP at rho=0.8</h2>
-            <p id="twap-scope">No result for selected interval</p>
+            <h2 id="twap-title"><span>vs TWAP at rho = 0.8:</span> <strong class="conclusion" id="conclusion"></strong></h2>
           </div>
           <div class="legend" id="twap-legend" aria-label="Chart legend">
             <span><i class="legend-mean diamond"></i>Mean</span>
@@ -48,10 +61,50 @@
             <span><i class="legend-seed range"></i>Seed range</span>
           </div>
         </div>
-        <p class="conclusion" id="conclusion"></p>
         <div class="chart chart-twap" id="twap-chart"></div>
       </section>
     </main>
+
+    <template id="rule-formula-template">
+      <div class="policy-formula">
+        <math display="block" aria-label="Rule-Based Baseline action as a piecewise function">
+          <mrow>
+            <msub><mi>a</mi><mi>t</mi></msub>
+            <mo>=</mo>
+            <mrow>
+              <mo fence="true">{</mo>
+              <mtable columnalign="left left" rowspacing="0.35em" columnspacing="0.7em">
+                <mtr>
+                  <mtd><mn>1</mn></mtd>
+                  <mtd><mrow><mtext>if </mtext><msub><mi>N</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow></mtd>
+                </mtr>
+                <mtr>
+                  <mtd><mfrac><mn>1</mn><msub><mi>N</mi><mi>t</mi></msub></mfrac></mtd>
+                  <mtd><mrow><mtext>if </mtext><msub><mi>s</mi><mi>t</mi></msub><mo>></mo><mn>0</mn></mrow></mtd>
+                </mtr>
+                <mtr>
+                  <mtd><mn>1</mn></mtd>
+                  <mtd>
+                    <mrow>
+                      <mtext>if </mtext><msub><mi>s</mi><mi>t</mi></msub><mo>≤</mo><mn>0</mn>
+                      <mtext> and </mtext>
+                      <mfrac><mrow><msub><mi>q</mi><mi>t</mi></msub><mi>T</mi></mrow><msub><mi>N</mi><mi>t</mi></msub></mfrac>
+                      <mo>></mo>
+                      <mfrac><mrow><mn>4</mn><msub><mi>σ</mi><mi>t</mi></msub></mrow><mn>0.002</mn></mfrac>
+                    </mrow>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd><mn>0</mn></mtd>
+                  <mtd><mtext>otherwise</mtext></mtd>
+                </mtr>
+              </mtable>
+            </mrow>
+          </mrow>
+        </math>
+        <p><var>a<sub>t</sub></var>: remaining-order fraction · <var>s<sub>t</sub></var>: directed signal · <var>q<sub>t</sub>T/N<sub>t</sub></var>: urgency · <var>σ<sub>t</sub></var>: volatility</p>
+      </div>
+    </template>
 
     <noscript><p class="load-error">JavaScript is required to load the experiment JSON.</p></noscript>
   </body>

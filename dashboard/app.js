@@ -157,7 +157,11 @@ function signalPanel(dataset, series, yMin, yMax) {
     node("span", "signal-panel-value", `rho=0.8 ${signed(series.mean[last])}`)
   );
   panel.append(header);
-  if (series.description) panel.append(node("p", "signal-panel-description", series.description));
+  if (series.id === "rule_based") {
+    panel.append($("#rule-formula-template").content.cloneNode(true));
+  } else if (series.description) {
+    panel.append(node("p", "signal-panel-description", series.description));
+  }
   panel.append(chart);
   return panel;
 }
@@ -249,14 +253,12 @@ function renderInterval() {
     empty($("#signal-chart"), interval, "signal");
     empty($("#twap-chart"), interval, "twap");
     $("#signal-scope").textContent = `${interval.label} · results pending`;
-    $("#twap-scope").textContent = `${interval.label} · no result`;
     return;
   }
 
   $("#signal-tools").hidden = false;
   $("#twap-legend").hidden = false;
   $("#signal-scope").textContent = interval.chartData.signalResponse.scope;
-  $("#twap-scope").textContent = interval.chartData.vsTwap.scope;
   drawSignal(interval.chartData.signalResponse);
   drawTwap(interval.chartData.vsTwap);
 }
@@ -294,7 +296,6 @@ async function init() {
     renderInterval();
   } catch (error) {
     $("#signal-scope").textContent = `Data load error · ${error.message}`;
-    $("#twap-scope").textContent = "No comparison available";
     empty($("#signal-chart"), { label: "Data", status: "data-ready" }, "signal");
     empty($("#twap-chart"), { label: "Data", status: "data-ready" }, "twap");
   }

@@ -17,13 +17,6 @@ METHODS = (
     ("memory_ppo", "memory_ppo", "Memory-PPO"),
 )
 DESCRIPTIONS = {
-    "hail_baseline": (
-        "aₜ = 1/Nₜ  if sₜ > 0\n"
-        "aₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\n"
-        "aₜ = 0     otherwise; final step: aₜ = 1\n"
-        "aₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; "
-        "Nₜ/T: time left; σₜ: volatility."
-    ),
     "sac": "Off-policy actor-critic trained with replayed execution transitions.",
     "ppo": "On-policy actor-critic trained with clipped policy updates.",
     "memory_ppo": "Recurrent PPO carrying an LSTM state through each execution day.",

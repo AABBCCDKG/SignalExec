@@ -37,8 +37,7 @@
                   -1.9931971189110895,
                   -2.213549819300471
                 ]
-              ],
-              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
+              ]
             },
             {
               "id": "sac",
@@ -227,8 +226,7 @@
                   -0.0008815032667146692,
                   -0.11124317830157357
                 ]
-              ],
-              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
+              ]
             },
             {
               "id": "sac",
@@ -415,8 +413,7 @@
                   1.978356169263746,
                   3.046275389922943
                 ]
-              ],
-              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
+              ]
             },
             {
               "id": "sac",
@@ -604,8 +601,7 @@
                   6.055932647920587,
                   7.542566757330887
                 ]
-              ],
-              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
+              ]
             },
             {
               "id": "sac",
@@ -793,8 +789,7 @@
                   10.446272126887363,
                   13.386265161830712
                 ]
-              ],
-              "description": "aₜ = 1/Nₜ  if sₜ > 0\naₜ = 1     if sₜ ≤ 0 and qₜ/(Nₜ/T) > 4σₜ/0.002\naₜ = 0     otherwise; final step: aₜ = 1\naₜ: fraction of remaining order; sₜ: directed signal; qₜ: remaining target; Nₜ/T: time left; σₜ: volatility."
+              ]
             },
             {
               "id": "sac",
